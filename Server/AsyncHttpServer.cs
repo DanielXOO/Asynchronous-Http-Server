@@ -65,10 +65,19 @@ namespace httpServer.DanielXOO
             {
                 using (var stream = request.InputStream)
                 {
-                    byte[] buffer = new byte[request.ContentLength64];
-                    await stream.ReadAsync(buffer);
-                    await Console.Out.WriteLineAsync(Encoding.UTF8.GetString(buffer));
-                    await stream.FlushAsync();
+                    try
+                    {
+                        byte[] buffer = new byte[request.ContentLength64];
+                        await stream.ReadAsync(buffer);
+                        await Console.Out.WriteLineAsync(Encoding.Default.GetString(buffer));
+                        await stream.FlushAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Data error");
+                        //TODO: Log ex in file
+                        Environment.Exit(1);
+                    }
                 }
             }
         }
